@@ -19,5 +19,5 @@ COPY . .
 
 RUN composer dump-autoload --no-scripts --optimize
 
-EXPOSE 8000
+EXPOSE 9000
 CMD ["php-fpm"]
