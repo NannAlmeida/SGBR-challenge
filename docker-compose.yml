@@ -1,0 +1,25 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            -   "8000:8000"
+        volumes:
+            -   .:/var/www/html
+        depends_on:
+            -   db
+        environment:
+            DB_HOST: db
+            DB_DATABASE: sgbr_challenge_api
+            DB_USERNAME: sgbr
+            DB_PASSWORD: challenge
+
+    db:
+        image: postgres:latest
+        ports:
+            -   "5432:5432"
+        environment:
+            POSTGRES_DB: sgbr_challenge_api
+            POSTGRES_USER: sgbr
+            POSTGRES_PASSWORD: challenge
