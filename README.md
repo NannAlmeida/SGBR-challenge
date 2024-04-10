@@ -1,66 +1,205 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Documentação da API de Gerenciamento de Lugares
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Esta API foi desenvolvida como parte do desafio do desenvolvedor backend para a construção de APIs simples para gerenciamento de lugares. A API permite realizar operações básicas de CRUD (Create, Read, Update, Delete) em lugares, além de fornecer a capacidade de filtrar os lugares por nome.
 
-## About Laravel
+## Tecnologias Utilizadas
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Laravel 10
+- PostgreSQL
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Configuração do Ambiente de Desenvolvimento
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Para configurar o ambiente de desenvolvimento e executar a API localmente, siga as instruções abaixo:
 
-## Learning Laravel
+### Pré-requisitos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Certifique-se de ter o seguinte instalado em sua máquina:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Docker
+- Docker Compose
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Instalação
 
-## Laravel Sponsors
+1. Clone o repositório:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+git clone <URL_DO_REPOSITÓRIO>
+cd <NOME_DO_REPOSITÓRIO>
+```
 
-### Premium Partners
+2. Crie um arquivo `.env` na raiz do projeto e configure suas variáveis de ambiente, incluindo a configuração do banco de dados PostgreSQL.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+3. Execute o seguinte comando para iniciar o ambiente de desenvolvimento:
 
-## Contributing
+```
+docker-compose up -d
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Acesse a API em http://localhost:8000.
 
-## Code of Conduct
+## Endpoints da API
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Criar um lugar
 
-## Security Vulnerabilities
+```
+POST /api/places
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Cria um novo lugar com os dados fornecidos no corpo da solicitação.
 
-## License
+#### Parâmetros de Solicitação
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- `name` (string, obrigatório): Nome do lugar.
+- `slug` (string, obrigatório): Slug do lugar.
+- `city` (string, obrigatório): Cidade do lugar.
+- `state` (string, obrigatório): Estado do lugar.
+
+#### Exemplo de Corpo da Solicitação
+
+```json
+{
+    "name": "Local A",
+    "city": "Cidade A",
+    "state": "Estado A"
+}
+```
+
+#### Exemplo de Resposta
+
+```json
+{
+    "id": 1,
+    "name": "Local A",
+    "city": "Cidade A",
+    "state": "Estado A",
+    "created_at": "2024-04-10T12:00:00.000Z",
+    "updated_at": "2024-04-10T12:00:00.000Z"
+}
+```
+
+### Editar um lugar
+
+```
+PUT /api/places/{id}
+```
+
+Atualiza os dados de um lugar existente com base no ID fornecido.
+
+#### Parâmetros de Solicitação
+
+- `name` (string, opcional): Novo nome do lugar.
+- `slug` (string, opcional): Novo slug do lugar.
+- `city` (string, opcional): Nova cidade do lugar.
+- `state` (string, opcional): Novo estado do lugar.
+
+#### Exemplo de Corpo da Solicitação
+
+```json
+{
+    "name": "Novo Local A"
+}
+```
+
+#### Exemplo de Resposta
+
+```json
+{
+    "id": 1,
+    "name": "Novo Local A",
+    "city": "Cidade A",
+    "state": "Estado A",
+    "created_at": "2024-04-10T12:00:00.000Z",
+    "updated_at": "2024-04-10T12:10:00.000Z"
+}
+```
+
+### Obter um lugar específico
+
+```
+GET /api/places/{id}
+```
+
+Retorna os detalhes de um lugar específico com base no ID fornecido.
+
+#### Exemplo de Resposta
+
+```json
+{
+    "id": 1,
+    "name": "Novo Local A",
+    "city": "Cidade A",
+    "state": "Estado A",
+    "created_at": "2024-04-10T12:00:00.000Z",
+    "updated_at": "2024-04-10T12:10:00.000Z"
+}
+```
+
+### Listar lugares e filtrá-los por nome
+
+```
+GET /api/places
+```
+
+Retorna uma lista de lugares. Você pode filtrar os lugares por nome, passando o parâmetro `name` na consulta.
+
+#### Parâmetros de Consulta
+
+- `name` (string, opcional): Filtra os lugares pelo nome.
+
+#### Exemplo de Resposta
+
+```json
+{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 1,
+            "name": "Novo Local A",
+            "city": "Cidade A",
+            "state": "Estado A",
+            "created_at": "2024-04-10T12:00:00.000Z",
+            "updated_at": "2024-04-10T12:10:00.000Z"
+        }
+    ],
+    "first_page_url": "http://localhost:8000/api/places?page=1",
+    "from": 1,
+    "last_page": 1,
+    "last_page_url": "http://localhost:8000/api/places?page=1",
+    "links": [
+        {
+            "active": false,
+            "label": "&laquo; Previous",
+            "url": null
+        },
+        {
+            "active": false,
+            "label": "Next &raquo;",
+            "url": null
+        },
+        {
+            "active": true,
+            "label": "1",
+            "url": "http://localhost:8000/api/places?page=1"
+        }
+    ],
+    "next_page_url": null,
+    "path": "http://localhost:8000/api/places",
+    "per_page": 10,
+    "prev_page_url": null,
+    "to": 1,
+    "total": 1
+}
+```
+
+## Observações
+
+- Todas as respostas da API são em formato JSON.
+- O banco de dados utilizado é o PostgreSQL.
+
+## Testes
+
+Os testes automatizados podem ser encontrados no diretório `tests` do projeto. Certifique-se de executar os testes após a configuração inicial da API para garantir que todas as funcionalidades estejam funcionando conforme esperado.
+
+## Considerações Finais
+
+A API foi desenvolvida seguindo boas práticas de programação e utilizando a estrutura e arquitetura recomendadas pelo Laravel. Se você tiver alguma dúvida ou encontrar problemas ao usar a API, não hesite em deixar o seu feedback.
