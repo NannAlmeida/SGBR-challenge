@@ -1,14 +1,29 @@
-FROM php:8.2-fpm
+FROM php:8.2-fpm-alpine
 
-RUN apt-get update && apt-get install -y \
-    git \
+WORKDIR /var/www
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN apk update && apk add \
+    build-base \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libzip-dev \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
     unzip \
-    libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql
+    git \
+    oniguruma-dev \
+    curl \
+    libpq-dev
+
+RUN docker-php-ext-install pdo_pgsql mbstring zip exif pcntl
+RUN docker-php-ext-configure gd
+RUN docker-php-ext-install gd
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-WORKDIR /var/www/html
 
 COPY composer.json composer.json
 COPY composer.lock composer.lock
@@ -19,5 +34,14 @@ COPY . .
 
 RUN composer dump-autoload --no-scripts --optimize
 
+#COPY ./config/php/local.ini /usr/local/etc/php/conf.d/local.ini
+
+RUN addgroup -g 1000 -S www && \
+    adduser -u 1000 -S www -G www
+
+USER www
+
+COPY --chown=www:www . /var/www
+
 EXPOSE 9000
-CMD ["php-fpm"]
+CMD ["php", "/var/www/artisan", "serve", "--port=9000"]
