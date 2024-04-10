@@ -1,4 +1,16 @@
 services:
+    db:
+        image: postgres:latest
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: sgbr_challenge_api
+            POSTGRES_USER: sgbr
+            POSTGRES_PASSWORD: challenge
+        networks:
+            - laravel
+
+
     app:
         build:
             context: .
@@ -14,12 +26,9 @@ services:
             DB_DATABASE: sgbr_challenge_api
             DB_USERNAME: sgbr
             DB_PASSWORD: challenge
+        networks:
+            - laravel
 
-    db:
-        image: postgres:latest
-        ports:
-            -   "5432:5432"
-        environment:
-            POSTGRES_DB: sgbr_challenge_api
-            POSTGRES_USER: sgbr
-            POSTGRES_PASSWORD: challenge
+networks:
+    laravel:
+        driver: bridge

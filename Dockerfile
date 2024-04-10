@@ -36,6 +36,10 @@ RUN composer dump-autoload --no-scripts --optimize
 
 #COPY ./config/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
+COPY run.sh /tmp
+
+RUN chmod +x /tmp/run.sh
+
 RUN addgroup -g 1000 -S www && \
     adduser -u 1000 -S www -G www
 
@@ -43,5 +47,9 @@ USER www
 
 COPY --chown=www:www . /var/www
 
+ENV APP_PORT 9000
+
 EXPOSE 9000
-CMD ["php", "/var/www/artisan", "serve", "--port=9000"]
+#CMD ["php", "/var/www/artisan", "serve", "--host=0.0.0.0", "--port=9000"]
+
+ENTRYPOINT ["/tmp/run.sh"]
